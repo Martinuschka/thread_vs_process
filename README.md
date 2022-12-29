@@ -1,4 +1,4 @@
 # Thread_vs_Process
-big programs for benchmarking
+small programs for benchmarking
 
-uses either processes or threads in python for martin
+uses either processes or threads in python for comparison
