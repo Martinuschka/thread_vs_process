@@ -1,4 +1,4 @@
-# Thread_vs_Process
+# thread_vs_process
 
 small programs for benchmarking
 
