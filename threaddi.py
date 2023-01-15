@@ -5,24 +5,27 @@ import math
 
 running=False
 
+def bench(number):
+	print("Process ",number," started.")
+	i=0
+	while True:
+		global running
+		if not running:
+			break
+		i+=1
+
 def pi(number):
 	print("Thread ",number," started.")
-
 	innerhalb=0
 	anzahl=0
 	pi=0
-	
 	while True:
 		anzahl+=1
-
 		x=random.random()
 		y=random.random()
-
 		z=math.sqrt(math.pow(x,2)+math.pow(y,2))
-
 		if z<1:
 			innerhalb+=1
-
 		pi=4*innerhalb/anzahl
 		global running
 		if not running:
