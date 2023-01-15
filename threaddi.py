@@ -4,10 +4,11 @@ import random
 import math
 
 
+# flag for killing threads and state of button
 running = False
-all_threads = []
 
 
+# backup function for simulating stress
 def bench(number):
 	print("Process ", number, " started.")
 	i = 0
@@ -18,6 +19,7 @@ def bench(number):
 		i += 1
 
 
+# approximating pi
 def pi(number):
 	print("Thread ", number, " started.")
 	innerhalb = 0
@@ -32,7 +34,9 @@ def pi(number):
 		pi_calculated = 4*innerhalb/anzahl
 		global running
 		if not running:
-			print("Pi: ", pi_calculated)
+			# print("Thread ", number, ", Pi: ", pi_calculated)
+			# printing this was too much at the same time for simultaneous threads
+			print(pi_calculated)
 			break
 
 
@@ -42,7 +46,6 @@ def only_numbers(char):
 
 def start():
 	global running
-	global all_threads
 
 	if entryThreads.get() == "":
 		threads = 0
@@ -51,9 +54,6 @@ def start():
 
 	if running:
 		running = False
-		for thread in all_threads:
-			thread.join()
-		all_threads.clear()
 		print("All threads killed.")
 		labelStatus.config(text="Idle")
 		buttonStart.config(text="Start")
@@ -63,10 +63,9 @@ def start():
 		if threads > 0:
 			running = True
 			for i in range(threads):
-				t = Thread(target=pi, args=(i+1,))
-				t.daemon = True
-				t.start()
-				all_threads.append(t)
+				thread = Thread(target=pi, args=(i+1,))
+				thread.daemon = True
+				thread.start()
 			labelStatus.config(text="Running")
 			buttonStart.config(text="Stop")
 			labelCount.config(text=str(threads)+" Thread(s)")
@@ -94,12 +93,7 @@ labelCount.pack(pady=2)
 
 
 def on_closing():
-	global running
-	global all_threads
-	running = False
-	for thread in all_threads:
-		thread.join()
-	all_threads.clear()
+	# threads killed automatically since daemon-threads
 	print("All threads killed.")
 	window.destroy()
 

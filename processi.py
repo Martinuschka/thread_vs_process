@@ -4,10 +4,13 @@ import random
 import math
 
 
+# flag only for state of button, since processes don't share memory
 running = False
+# list for terminating processes
 all_processes = []
 
 
+# backup function for simulating stress
 def bench(number):
 	print("Process ", number, " started.")
 	i = 0
@@ -15,6 +18,7 @@ def bench(number):
 		i += 1
 
 
+# approximating pi
 def pi(number):
 	print("Process ", number, " started.")
 	innerhalb = 0
@@ -27,10 +31,8 @@ def pi(number):
 		if z < 1:
 			innerhalb += 1
 		pi_calculated = 4*innerhalb/anzahl
-		global running
-		if not running:
-			print("Pi: ", pi_calculated)
-			break
+		if anzahl % 10000000 == 0:
+			print("Process ", number, ", Pi: ", pi_calculated)
 
 
 def only_numbers(char):
@@ -61,7 +63,6 @@ def start():
 			running = True
 			for i in range(processes):
 				process = multiprocessing.Process(target=pi, args=(i+1,))
-				process.daemon = True
 				process.start()
 				all_processes.append(process)
 			labelStatus.config(text="Running")
@@ -91,9 +92,7 @@ labelCount.pack(pady=2)
 
 
 def on_closing():
-	global running
 	global all_processes
-	running = False
 	for process in all_processes:
 		process.terminate()
 	all_processes.clear()
